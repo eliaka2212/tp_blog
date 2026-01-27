@@ -6,13 +6,14 @@ use App\Http\Controllers\CommentController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\TagController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\PublicController;
 
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
+   
 });
-
 
 
 Route::middleware('auth')->group(function () {
@@ -24,7 +25,12 @@ Route::middleware('auth')->group(function () {
     Route::get('/dashboard', [UserController::class, 'index'])->name('dashboard');
     Route::get('/articles/{article}/edit', [UserController::class, 'edit'])->name('articles.edit');
     Route::post('/articles/{article}/update', [UserController::class, 'update'])->name('articles.update');
-    Route::delete('/articles/{id}/destroy', [UserController::class, 'destroy'])->name('articles.destroy');
+    Route::delete('/articles/{article}/destroy', [UserController::class, 'remove'])->name('articles.remove');
 });
 
 require __DIR__.'/auth.php';
+
+
+Route::post('/comments/store', [CommentController::class, 'store'])->name('comments.store');
+Route::get('/{user}', [PublicController::class, 'index'])->name('public.index');
+Route::get('/{user}/{article}', [PublicController::class, 'show'])->name('public.show');

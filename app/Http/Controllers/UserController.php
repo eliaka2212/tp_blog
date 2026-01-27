@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 use App\Models\Article;
+use App\Models\Category;
 use Illuminate\Support\Facades\Auth;
 
 use Illuminate\Http\Request;
@@ -10,7 +11,8 @@ class UserController extends Controller
 {
     public function create()
 {
-    return view('articles.create');
+    $categories = Category::all();
+    return view('articles.create', ['categories' => $categories]);
 }
 public function store(Request $request)
 {
@@ -24,7 +26,9 @@ public function store(Request $request)
     $data['draft'] = isset($data['draft']) ? 1 : 0;
 
     
-    $article = Article::create($data); 
+    $article = Article::create($data);
+    $article->categories()->sync($request->input('categories'));
+ 
     return redirect()->route('dashboard');
 }
 public function index()
@@ -43,7 +47,8 @@ public function edit(Article $article)
 
     
     return view('articles.edit', [
-        'article' => $article
+        'article' => $article,
+        'categories' => Category::all()
     ]);
 }
 public function update(Request $request, Article $article)
@@ -61,6 +66,7 @@ public function update(Request $request, Article $article)
 
     
     $article->update($data);
+    $article->categories()->sync($request->input('categories'));
 
    
     return redirect()->route('dashboard')->with('success', 'Article mis à jour !');

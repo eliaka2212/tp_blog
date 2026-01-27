@@ -32,6 +32,11 @@
                     <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
                         <div class="p-6 text-gray-900 dark:text-gray-100">
                             <h2 class="text-2xl font-bold">{{ $article->title }}</h2>
+                            <div class="flex flex-wrap gap-2 mt-2">
+                                @foreach ($article->categories as $category)
+                                    <span class="bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 px-3 py-1 rounded-full text-xs font-semibold">#{{ $category->name }}</span>
+                                @endforeach
+                            </div>
                             <p class="text-gray-700 dark:text-gray-300 mt-2">
                                 {{ Str::limit($article->content, 100) }}
                             </p>
@@ -40,7 +45,7 @@
                                     Modifier
                                 </a>
                                 <p></p>
-                                <form action="{{ route('articles.destroy', $article->id) }}" method="DELETE" class="inline">
+                                <form action="{{ route('articles.remove', $article->id) }}" method="POST" class="inline">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit" class="text-red-500 hover:text-red-700">

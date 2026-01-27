@@ -8,4 +8,21 @@ export default defineConfig({
             refresh: true,
         }),
     ],
+    server: {
+        // Use polling to avoid watcher errors on some Windows filesystems
+        watch: {
+            usePolling: true,
+            interval: 100,
+        },
+    },
+    build: {
+        manifest: true,
+        outDir: 'public/build',
+        rollupOptions: {
+            input: {
+                app: 'resources/js/app.js',
+                style: 'resources/css/app.css'
+            }
+        }
+    }
 });
